@@ -6,6 +6,7 @@ import About from './components/About.jsx';
 import Skills from './components/Skills.jsx';
 import Certifications from './components/Certifications.jsx';
 import Footer from './components/Footer.jsx';
+import Badges from "./components/Badges.jsx";
 
 function App() {
     useEffect(() => {
@@ -35,6 +36,7 @@ function App() {
                 <About />
                 <Skills />
                 <Certifications />
+                <Badges />
             </main>
             <Footer />
         </>
