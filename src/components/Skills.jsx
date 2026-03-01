@@ -127,7 +127,7 @@ const Skills = () => {
                                         whileHover={{
                                             y: -6,
                                             scale: 1.08,
-                                            boxShadow: '0 12px 40px rgba(168, 85, 247, 0.2)',
+                                            boxShadow: '0 12px 40px rgba(192, 192, 200, 0.15)',
                                             borderColor: 'var(--accent-primary)',
                                             transition: { duration: 0.2 }
                                         }}

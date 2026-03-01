@@ -89,7 +89,7 @@ const Certifications = () => {
                             whileHover={{
                                 x: 12,
                                 scale: 1.02,
-                                boxShadow: '0 16px 50px rgba(168, 85, 247, 0.12)',
+                                boxShadow: '0 16px 50px rgba(192, 192, 200, 0.12)',
                                 transition: { duration: 0.3 }
                             }}
                         >

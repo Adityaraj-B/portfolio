@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import profile from '../assets/pic.jpeg';
+import profile from '../assets/IMG_20250519_232710.jpg';
 
 const About = () => {
     const stats = [
@@ -102,7 +102,7 @@ const About = () => {
                                     whileHover={{
                                         y: -8,
                                         scale: 1.05,
-                                        boxShadow: '0 20px 60px rgba(168, 85, 247, 0.15)',
+                                        boxShadow: '0 20px 60px rgba(192, 192, 200, 0.15)',
                                         transition: { duration: 0.3 }
                                     }}
                                 >

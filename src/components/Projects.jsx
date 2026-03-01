@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiExternalLink, FiGithub } from 'react-icons/fi';
 import sangeetImage from '../assets/Gemini_Generated_Image_hjr2lhjr2lhjr2lh.png';
@@ -42,10 +43,31 @@ const projectsData = [
         github: 'https://github.com/ManjiriKench/PainSense.git',
         demo: 'https://painsense-4ff16.web.app/',
     },
+    {
+        id: 3,
+        title: 'Kisan Setu — Farmer Scheme Discovery Platform',
+        shortDescription: 'Flutter app that surfaces government schemes, insurance & financial support for rural farmers using just 3 inputs.',
+        description: 'Built for a national hackathon (AS-4 problem statement). Kisan Setu bridges the information gap for rural Indian farmers — enter State, Crops, and Land Size and the app auto-matches eligible government schemes (PM-KISAN, PMFBY, KCC, eNAM, PKVY) from a curated database. Includes a dedicated PMFBY crop insurance flow, KCC & loan screens, Gemini-powered AI chatbot, 7-day weather farming advisories, and full multilingual support (EN/HI/MR). Secured OTP auth and offline-first architecture make it accessible to low-literacy users.',
+        tech: ['Flutter', 'Firebase', 'Gemini AI', 'Provider', 'Secure Storage', 'REST APIs'],
+        status: 'Completed',
+        image: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=600&h=400&fit=crop',
+        features: [
+            'Profile-driven scheme matching using State + Crops + Land size',
+            'Curated database: PM-KISAN, PMFBY, KCC, eNAM, PKVY & more',
+            'Dedicated PMFBY insurance flow with step-by-step premium guidance',
+            'KCC & loan screens with subsidy detail breakdowns',
+            'Multilingual support — English, Hindi & Marathi',
+            'Gemini AI chatbot for natural-language scheme queries',
+            '7-day weather forecast with spray & irrigation advisories',
+            'Offline-first with encrypted local storage for sensitive data',
+        ],
+        github: 'https://github.com/Adityaraj-B/KisanSetu.git',
+        demo: '#',
+    },
 ];
 
 const ProjectModal = ({ project, onClose }) => {
-    return (
+    return createPortal(
         <motion.div
             className="project-modal-overlay"
             initial={{ opacity: 0 }}
@@ -54,7 +76,7 @@ const ProjectModal = ({ project, onClose }) => {
             onClick={onClose}
         >
             <motion.div
-                className="project-modal glass-card"
+                className="project-modal"
                 initial={{ opacity: 0, scale: 0.9, y: 50 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 50 }}
@@ -117,12 +139,25 @@ const ProjectModal = ({ project, onClose }) => {
                     </div>
                 </div>
             </motion.div>
-        </motion.div>
+        </motion.div>,
+        document.body
     );
 };
 
 const Projects = () => {
     const [selectedProject, setSelectedProject] = useState(null);
+
+    // Lock background scroll when modal is open
+    useEffect(() => {
+        if (selectedProject) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [selectedProject]);
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -183,7 +218,7 @@ const Projects = () => {
                                     rotateY: 2,
                                     rotateX: 1,
                                     scale: 1.02,
-                                    boxShadow: '0 24px 80px rgba(168, 85, 247, 0.2)',
+                                    boxShadow: '0 24px 80px rgba(192, 192, 200, 0.15)',
                                     transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] }
                                 }}
                                 style={{ perspective: 1000 }}

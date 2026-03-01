@@ -30,6 +30,7 @@ const AnimatedGradient = () => {
             <div className="animated-gradient-orb orb-1" />
             <div className="animated-gradient-orb orb-2" />
             <div className="animated-gradient-orb orb-3" />
+            <div className="animated-gradient-orb orb-4" />
         </div>
     );
 };

@@ -72,7 +72,7 @@ const Footer = () => {
                             whileHover={{
                                 y: -6,
                                 rotate: [0, -5, 5, 0],
-                                boxShadow: '0 12px 40px rgba(168, 85, 247, 0.25)',
+                                boxShadow: '0 12px 40px rgba(192, 192, 200, 0.2)',
                                 transition: { duration: 0.3 }
                             }}
                         >
