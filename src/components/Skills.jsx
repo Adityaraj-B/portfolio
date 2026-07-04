@@ -26,6 +26,7 @@ const skillCategories = [
             { icon: <SiCss3 />, name: 'CSS3' },
             { icon: <SiReact />, name: 'React' },
             { icon: <SiFlutter />, name: 'Flutter' },
+            { icon: <SiReact />, name: 'React Native' },
         ],
     },
     {

@@ -1,8 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import profile from '../assets/IMG_20250519_232710.jpg';
+import useReadFocus from '../hooks/useReadFocus';
 
 const About = () => {
+    const [focusRef, isReading] = useReadFocus();
+
     const stats = [
         { value: '8.53', label: 'CGPA' },
         { value: '20+', label: 'Badges' },
@@ -47,7 +50,7 @@ const About = () => {
     };
 
     return (
-        <section id="about" className="about-section">
+        <section id="about" ref={focusRef} className={`about-section ${isReading ? 'is-reading' : ''}`}>
             <div className="container">
                 <motion.div
                     className="about-grid"

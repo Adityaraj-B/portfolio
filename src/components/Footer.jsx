@@ -1,8 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FiLinkedin, FiGithub, FiMail } from 'react-icons/fi';
+import useReadFocus from '../hooks/useReadFocus';
 
 const Footer = () => {
+    const [focusRef, isReading] = useReadFocus();
+
     const socialLinks = [
         {
             href: 'http://www.linkedin.com/in/adityaraj-bagwan-07464a320',
@@ -24,7 +27,8 @@ const Footer = () => {
     return (
         <motion.footer
             id="contact"
-            className="footer"
+            ref={focusRef}
+            className={`footer ${isReading ? 'is-reading' : ''}`}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

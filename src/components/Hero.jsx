@@ -2,8 +2,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FiArrowRight, FiDownload } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import useReadFocus from '../hooks/useReadFocus';
 
 const Hero = () => {
+    // Hero fills the viewport, so a wider band (-20%) keeps the backdrop
+    // active for most of the time it's on screen.
+    const [focusRef, isReading] = useReadFocus('-20% 0px -20% 0px');
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -29,7 +33,7 @@ const Hero = () => {
     };
 
     return (
-        <header className="hero">
+        <header ref={focusRef} className={`hero ${isReading ? 'is-reading' : ''}`}>
             <motion.div
                 className="hero-content"
                 variants={containerVariants}

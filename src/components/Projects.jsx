@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiX, FiExternalLink, FiGithub } from 'react-icons/fi';
+import { FiX, FiExternalLink, FiGithub, FiUploadCloud } from 'react-icons/fi';
 import sangeetImage from '../assets/Gemini_Generated_Image_hjr2lhjr2lhjr2lh.png';
+import useReadFocus from '../hooks/useReadFocus';
 
 const projectsData = [
     {
@@ -66,25 +67,44 @@ const projectsData = [
     },
 ];
 
-const ProjectModal = ({ project, onClose }) => {
+const easing = [0.22, 1, 0.36, 1];
+
+const ProjectModal = ({ project, onClose, screenshots, onUpload }) => {
+    const fileInputRef = useRef(null);
+
+    const handleFileUpload = (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length === 0) return;
+
+        const newImages = files.map((file) => ({
+            id: URL.createObjectURL(file),
+            url: URL.createObjectURL(file),
+            name: file.name,
+        }));
+
+        onUpload(project.id, newImages);
+    };
+
     return createPortal(
         <motion.div
             className="project-modal-overlay"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, ease: easing }}
             onClick={onClose}
         >
             <motion.div
                 className="project-modal"
-                initial={{ opacity: 0, scale: 0.9, y: 50 }}
+                data-lenis-prevent
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: 50 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                transition={{ duration: 0.5, ease: easing }}
                 onClick={(e) => e.stopPropagation()}
             >
-                <button className="modal-close" onClick={onClose} aria-label="Close modal">
-                    <FiX />
+                <button className="modal-close" onClick={onClose} aria-label="Close">
+                    <FiX size={20} />
                 </button>
 
                 <div className="modal-image-wrapper">
@@ -104,7 +124,7 @@ const ProjectModal = ({ project, onClose }) => {
                                     key={index}
                                     initial={{ opacity: 0, x: -10 }}
                                     animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: index * 0.05, duration: 0.4 }}
+                                    transition={{ delay: 0.2 + index * 0.05, duration: 0.4, ease: easing }}
                                 >
                                     {feature}
                                 </motion.li>
@@ -117,11 +137,11 @@ const ProjectModal = ({ project, onClose }) => {
                         <div className="modal-tech">
                             {project.tech.map((tech, index) => (
                                 <motion.span
-                                    key={index}
                                     className="tech-tag"
-                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    key={index}
+                                    initial={{ opacity: 0, scale: 0.9 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ delay: index * 0.04, duration: 0.3 }}
+                                    transition={{ delay: 0.3 + index * 0.04, duration: 0.4, ease: easing }}
                                 >
                                     {tech}
                                 </motion.span>
@@ -129,13 +149,69 @@ const ProjectModal = ({ project, onClose }) => {
                         </div>
                     </div>
 
+                    <div className="modal-section">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                            <h3 style={{ margin: 0 }}>Project Screenshots</h3>
+                            <button
+                                onClick={() => fileInputRef.current.click()}
+                                className="btn btn-secondary"
+                                style={{ padding: '0.5rem 1.1rem', fontSize: '0.85rem' }}
+                            >
+                                <FiUploadCloud /> Upload
+                            </button>
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                onChange={handleFileUpload}
+                                multiple
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                            />
+                        </div>
+
+                        {screenshots && screenshots.length > 0 ? (
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '0.75rem' }}>
+                                {screenshots.map((img) => (
+                                    <motion.div
+                                        key={img.id}
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        style={{
+                                            aspectRatio: '4/3',
+                                            borderRadius: 'var(--radius-sm)',
+                                            overflow: 'hidden',
+                                            border: '1px solid var(--glass-border)',
+                                        }}
+                                    >
+                                        <img src={img.url} alt={img.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    </motion.div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div
+                                style={{
+                                    background: 'var(--glass-bg)',
+                                    padding: '2rem 1rem',
+                                    borderRadius: 'var(--radius-md)',
+                                    textAlign: 'center',
+                                    color: 'var(--text-muted)',
+                                    border: '1px dashed var(--border-default)',
+                                }}
+                            >
+                                <p style={{ margin: 0, fontSize: '0.9rem' }}>No screenshots uploaded for this project.</p>
+                            </div>
+                        )}
+                    </div>
+
                     <div className="modal-actions">
-                        <a href={project.github} className="btn btn-secondary" target="_blank" rel="noopener noreferrer">
-                            <FiGithub /> View Code
+                        <a href={project.github} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
+                            <FiGithub /> View Source
                         </a>
-                        <a href={project.demo} className="btn btn-primary" target="_blank" rel="noopener noreferrer">
-                            <FiExternalLink /> Live Demo
-                        </a>
+                        {project.demo !== '#' && (
+                            <a href={project.demo} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+                                <FiExternalLink /> Live Demo
+                            </a>
+                        )}
                     </div>
                 </div>
             </motion.div>
@@ -145,9 +221,10 @@ const ProjectModal = ({ project, onClose }) => {
 };
 
 const Projects = () => {
+    const [focusRef, isReading] = useReadFocus();
     const [selectedProject, setSelectedProject] = useState(null);
+    const [screenshotsByProject, setScreenshotsByProject] = useState({});
 
-    // Lock background scroll when modal is open
     useEffect(() => {
         if (selectedProject) {
             document.body.style.overflow = 'hidden';
@@ -159,44 +236,49 @@ const Projects = () => {
         };
     }, [selectedProject]);
 
+    const handleUpload = (projectId, newImages) => {
+        setScreenshotsByProject((prev) => ({
+            ...prev,
+            [projectId]: [...(prev[projectId] || []), ...newImages],
+        }));
+    };
+
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
-            transition: {
-                staggerChildren: 0.2,
-            },
+            transition: { staggerChildren: 0.15 },
         },
     };
 
     const cardVariants = {
-        hidden: { opacity: 0, y: 50, rotateX: -10 },
+        hidden: { opacity: 0, y: 30 },
         visible: {
             opacity: 1,
             y: 0,
-            rotateX: 0,
-            transition: {
-                duration: 0.8,
-                ease: [0.16, 1, 0.3, 1],
-            },
+            transition: { duration: 0.8, ease: easing },
         },
     };
 
     return (
         <>
-            <section id="projects" className="projects-section">
-                <div className="container">
+            <section
+                id="projects"
+                ref={focusRef}
+                className={`projects-section ${isReading ? 'is-reading' : ''}`}
+            >
+                <div className="container container-wide">
                     <motion.div
                         className="section-header"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
+                        transition={{ duration: 0.8, ease: easing }}
                     >
                         <span className="section-label">Portfolio</span>
-                        <h2 className="section-title">Featured Projects</h2>
+                        <h2 className="section-title">Selected Works</h2>
                         <p className="section-subtitle">
-                            A selection of projects I've worked on recently
+                            A showcase of recent technical explorations and shipped products.
                         </p>
                     </motion.div>
 
@@ -204,35 +286,27 @@ const Projects = () => {
                         className="projects-grid"
                         initial="hidden"
                         whileInView="visible"
-                        viewport={{ once: true, margin: '-50px' }}
+                        viewport={{ once: true, margin: '-100px' }}
                         variants={containerVariants}
                     >
                         {projectsData.map((project) => (
                             <motion.article
-                                className="project-card glass-card"
                                 key={project.id}
+                                className="project-card"
                                 variants={cardVariants}
                                 onClick={() => setSelectedProject(project)}
-                                whileHover={{
-                                    y: -12,
-                                    rotateY: 2,
-                                    rotateX: 1,
-                                    scale: 1.02,
-                                    boxShadow: '0 24px 80px rgba(192, 192, 200, 0.15)',
-                                    transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] }
-                                }}
-                                style={{ perspective: 1000 }}
+                                whileHover={{ y: -8, transition: { duration: 0.3 } }}
                             >
                                 <div className="project-image-wrapper">
                                     <motion.img
                                         src={project.image}
                                         alt={project.title}
                                         className="project-image"
-                                        whileHover={{ scale: 1.1 }}
-                                        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                                        whileHover={{ scale: 1.06 }}
+                                        transition={{ duration: 0.6, ease: easing }}
                                     />
                                     <div className="project-overlay">
-                                        <span>View Details</span>
+                                        <span>View Project</span>
                                     </div>
                                 </div>
                                 <div className="project-content">
@@ -241,14 +315,7 @@ const Projects = () => {
                                     <p>{project.shortDescription}</p>
                                     <div className="project-tech">
                                         {project.tech.slice(0, 3).map((tech, techIndex) => (
-                                            <motion.span
-                                                key={techIndex}
-                                                className="tech-tag"
-                                                whileHover={{ scale: 1.1, y: -2 }}
-                                                transition={{ duration: 0.2 }}
-                                            >
-                                                {tech}
-                                            </motion.span>
+                                            <span className="tech-tag" key={techIndex}>{tech}</span>
                                         ))}
                                         {project.tech.length > 3 && (
                                             <span className="tech-tag">+{project.tech.length - 3}</span>
@@ -266,6 +333,8 @@ const Projects = () => {
                     <ProjectModal
                         project={selectedProject}
                         onClose={() => setSelectedProject(null)}
+                        screenshots={screenshotsByProject[selectedProject.id] || []}
+                        onUpload={handleUpload}
                     />
                 )}
             </AnimatePresence>

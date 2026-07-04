@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FiExternalLink } from 'react-icons/fi';
 import { SiGooglecloud } from 'react-icons/si';
+import useReadFocus from '../hooks/useReadFocus';
 
 const badgesData = [
     { link: "https://www.skills.google/public_profiles/def0927f-d367-48bf-9f53-66ef92b98bc9/badges/18978325", title: "Basics of Google Cloud Compute" },
@@ -27,6 +28,8 @@ const badgesData = [
 ];
 
 const Badges = () => {
+    const [focusRef, isReading] = useReadFocus();
+
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -52,7 +55,7 @@ const Badges = () => {
     };
 
     return (
-        <section id="badges" className="badges-section">
+        <section id="badges" ref={focusRef} className={`badges-section ${isReading ? 'is-reading' : ''}`}>
             <div className="container">
                 <motion.div
                     className="section-header"
