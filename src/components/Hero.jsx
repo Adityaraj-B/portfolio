@@ -50,13 +50,13 @@ const Hero = () => {
                 </motion.h1>
 
                 <motion.h2 className="hero-title" variants={itemVariants}>
-                    Software Engineer & <span className="highlight">Cloud Enthusiast</span>
+                    Flutter & Full-Stack Engineer | <span className="highlight">AI & Cloud</span>
                 </motion.h2>
 
                 <motion.p className="hero-description" variants={itemVariants}>
-                    Undergraduate at Vishwakarma University, Pune. I build beautiful
-                    mobile experiences with Flutter and explore the frontiers of
-                    AI & Cloud Computing.
+                    CS undergraduate at Vishwakarma University, Pune. I build
+                    production-ready Flutter apps and full-stack platforms powered
+                    by AI, Google Cloud & Gemini API.
                 </motion.p>
 
                 <motion.div className="hero-cta" variants={itemVariants}>

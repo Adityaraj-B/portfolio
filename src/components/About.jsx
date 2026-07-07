@@ -1,14 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import profile from '../assets/IMG_20250519_232710.jpg';
-import useReadFocus from '../hooks/useReadFocus';
 
 const About = () => {
-    const [focusRef, isReading] = useReadFocus();
-
     const stats = [
-        { value: '8.53', label: 'CGPA' },
-        { value: '20+', label: 'Badges' },
+        { value: '8.63', label: 'CGPA' },
+        { value: '30+', label: 'Badges' },
         { value: 'B.Tech', label: 'CS Engineering' },
     ];
 
@@ -50,7 +47,7 @@ const About = () => {
     };
 
     return (
-        <section id="about" ref={focusRef} className={`about-section ${isReading ? 'is-reading' : ''}`}>
+        <section id="about" className="about-section">
             <div className="container">
                 <motion.div
                     className="about-grid"
@@ -85,13 +82,13 @@ const About = () => {
 
                         <motion.p variants={itemVariants}>
                             I'm a Computer Science undergraduate at <strong>Vishwakarma University, Pune</strong>,
-                            passionate about creating accessible and user-friendly digital experiences. My journey
-                            spans both front-end elegance and back-end robustness.
+                            with hands-on experience developing Flutter and full-stack applications using Firebase,
+                            Google Cloud, and REST APIs. I've built AI-powered mobile apps with LLM integration and cloud deployment.
                         </motion.p>
 
                         <motion.p variants={itemVariants}>
-                            My focus areas include Object-Oriented Programming, Data Structures & Algorithms,
-                            Database Management, and AI & Machine Learning. I thrive on projects where design
+                            My focus areas include Flutter Architecture (BLoC, Clean Architecture), Node.js backends,
+                            Machine Learning, and GCP services like Vertex AI & Cloud Run. I thrive where design
                             meets thoughtful engineering.
                         </motion.p>
 

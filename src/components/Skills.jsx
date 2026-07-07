@@ -3,10 +3,13 @@ import { motion } from 'framer-motion';
 import {
     SiC, SiCplusplus, SiPython, SiJavascript, SiDart,
     SiHtml5, SiCss3, SiReact, SiFlutter,
-    SiGooglecloud, SiGit, SiGithub, SiLinux, SiFirebase
+    SiGooglecloud, SiGit, SiGithub, SiFirebase,
+    SiNodedotjs, SiExpress, SiDocker, SiVercel,
+    SiNetlify, SiMysql
 } from 'react-icons/si';
 import { TbApi, TbBinaryTree } from 'react-icons/tb';
-import { FiDatabase } from 'react-icons/fi';
+import { FiDatabase, FiCloud } from 'react-icons/fi';
+import { MdOutlineSmartToy } from 'react-icons/md';
 
 const skillCategories = [
     {
@@ -20,7 +23,7 @@ const skillCategories = [
         ],
     },
     {
-        title: 'Frontend',
+        title: 'Frontend & Mobile',
         skills: [
             { icon: <SiHtml5 />, name: 'HTML5' },
             { icon: <SiCss3 />, name: 'CSS3' },
@@ -30,20 +33,33 @@ const skillCategories = [
         ],
     },
     {
-        title: 'Backend & Cloud',
+        title: 'Backend & Databases',
         skills: [
-            { icon: <SiGooglecloud />, name: 'GCP' },
+            { icon: <SiNodedotjs />, name: 'Node.js' },
+            { icon: <SiExpress />, name: 'Express.js' },
             { icon: <SiFirebase />, name: 'Firebase' },
+            { icon: <FiDatabase />, name: 'SQL' },
             { icon: <TbApi />, name: 'REST APIs' },
-            { icon: <FiDatabase />, name: 'Databases' },
         ],
     },
     {
-        title: 'Tools & Core',
+        title: 'Cloud & AI',
+        skills: [
+            { icon: <SiGooglecloud />, name: 'GCP' },
+            { icon: <FiCloud />, name: 'Vertex AI' },
+            { icon: <FiCloud />, name: 'Cloud Run' },
+            { icon: <MdOutlineSmartToy />, name: 'Gemini API' },
+            { icon: <MdOutlineSmartToy />, name: 'LLM Integration' },
+        ],
+    },
+    {
+        title: 'DevOps & Tools',
         skills: [
             { icon: <SiGit />, name: 'Git' },
-            { icon: <SiGithub />, name: 'GitHub' },
-            { icon: <TbBinaryTree />, name: 'Data Science & Algorithms' },
+            { icon: <SiGithub />, name: 'GitHub Actions' },
+            { icon: <SiDocker />, name: 'Docker' },
+            { icon: <SiVercel />, name: 'Vercel' },
+            { icon: <TbBinaryTree />, name: 'DSA' },
         ],
     },
 ];

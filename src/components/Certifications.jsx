@@ -5,7 +5,6 @@ import ids from '../assets/Screenshot 2025-09-21 000538.png';
 import fdt from '../assets/img.png';
 import dsf from '../assets/img_1.png';
 import bdv from '../assets/img_2.png';
-import useReadFocus from '../hooks/useReadFocus';
 
 const certificationsData = [
     {
@@ -36,8 +35,6 @@ const certificationsData = [
 ];
 
 const Certifications = () => {
-    const [focusRef, isReading] = useReadFocus();
-
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -63,7 +60,7 @@ const Certifications = () => {
     };
 
     return (
-        <section id="certifications" ref={focusRef} className={`certifications-section ${isReading ? 'is-reading' : ''}`}>
+        <section id="certifications" className="certifications-section">
             <div className="container">
                 <motion.div
                     className="section-header"
