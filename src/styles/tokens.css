@@ -1,0 +1,151 @@
+/* ============================================================
+   DESIGN TOKENS
+   Warm-ink editorial palette. Dark is the default; light is a
+   true paper theme, not an inverted dark theme.
+   ============================================================ */
+
+:root {
+    /* ---- Type ---- */
+    --font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+    --font-sans: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+    /* Fluid type scale (clamped, viewport-aware) */
+    --fs-mono: 0.6875rem;
+    --fs-xs: 0.78rem;
+    --fs-sm: 0.875rem;
+    --fs-base: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
+    --fs-lg: clamp(1.1rem, 1rem + 0.5vw, 1.35rem);
+    --fs-xl: clamp(1.4rem, 1.2rem + 1vw, 2rem);
+    --fs-2xl: clamp(2rem, 1.4rem + 2.6vw, 3.4rem);
+    --fs-3xl: clamp(2.6rem, 1.6rem + 4.4vw, 5.2rem);
+    --fs-mega: clamp(3.2rem, 1rem + 11vw, 11rem);
+
+    /* ---- Motion ---- */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-in-out-quint: cubic-bezier(0.83, 0, 0.17, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --t-fast: 0.22s var(--ease-out-quart);
+    --t-med: 0.45s var(--ease-out-expo);
+    --t-slow: 0.8s var(--ease-out-expo);
+    --t-theme: 0.6s var(--ease-out-expo);
+
+    /* ---- Space & size ---- */
+    --nav-h: 76px;
+    --gutter: clamp(1.25rem, 4vw, 3.5rem);
+    --maxw: 1280px;
+    --maxw-text: 62ch;
+    --r-xs: 8px;
+    --r-sm: 14px;
+    --r-md: 22px;
+    --r-lg: 34px;
+    --r-xl: 48px;
+    --r-full: 999px;
+    --section-y: clamp(5rem, 11vh, 10rem);
+
+    --z-bg: 0;
+    --z-content: 1;
+    --z-nav: 80;
+    --z-overlay: 200;
+    --z-cursor: 999;
+}
+
+/* ---------- DARK (default) ---------- */
+:root,
+[data-theme='dark'] {
+    color-scheme: dark;
+
+    --ink-0: #07070a;
+    /* page */
+    --ink-1: #0b0b10;
+    /* raised */
+    --ink-2: #101016;
+    /* panel */
+    --ink-3: #17171f;
+    /* panel hover */
+
+    --fg: #f3f1ec;
+    --fg-strong: #fffdf8;
+    --fg-muted: #9e9ba6;
+    --fg-faint: #6a6775;
+
+    --line: rgba(243, 241, 236, 0.1);
+    --line-strong: rgba(243, 241, 236, 0.2);
+
+    --accent: #ff9a3c;
+    --accent-soft: #ffc98a;
+    --accent-deep: #c96a19;
+    --accent-ink: #1a0f03;
+    --accent-glow: rgba(255, 154, 60, 0.3);
+    --accent-wash: rgba(255, 154, 60, 0.08);
+
+    --cool: #7fb2ff;
+    --mint: #6fe3c4;
+
+    --glass: rgba(243, 241, 236, 0.045);
+    --glass-strong: rgba(243, 241, 236, 0.08);
+    --glass-blur: saturate(160%) blur(22px);
+
+    /* Opaque stand-ins for surfaces that used to each run their own
+       backdrop-filter pass. Real blur is reserved for the nav and modals. */
+    --panel-bg: #14141b;
+    --chip-bg: #16161e;
+
+    --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 18px 50px -12px rgba(0, 0, 0, 0.7);
+    --shadow-lg: 0 40px 100px -24px rgba(0, 0, 0, 0.85);
+    --shadow-accent: 0 20px 60px -18px var(--accent-glow);
+
+    --grain-opacity: 0.045;
+    --aurora-1: rgba(255, 154, 60, 0.2);
+    --aurora-2: rgba(127, 178, 255, 0.14);
+    --aurora-3: rgba(111, 227, 196, 0.1);
+    --spot: rgba(255, 201, 138, 0.07);
+}
+
+/* ---------- LIGHT (paper) ---------- */
+[data-theme='light'] {
+    color-scheme: light;
+
+    --ink-0: #f7f4ee;
+    --ink-1: #fffdf9;
+    --ink-2: #ffffff;
+    --ink-3: #fdfaf4;
+
+    --fg: #1b1a1f;
+    --fg-strong: #0a0a0c;
+    --fg-muted: #5f5c66;
+    --fg-faint: #918d99;
+
+    --line: rgba(27, 26, 31, 0.12);
+    --line-strong: rgba(27, 26, 31, 0.24);
+
+    --accent: #c25b0c;
+    --accent-soft: #e08a2e;
+    --accent-deep: #8f3f05;
+    --accent-ink: #fff8ef;
+    --accent-glow: rgba(194, 91, 12, 0.22);
+    --accent-wash: rgba(194, 91, 12, 0.07);
+
+    --cool: #2f6fd0;
+    --mint: #15806a;
+
+    --glass: rgba(255, 255, 255, 0.6);
+    --glass-strong: rgba(255, 255, 255, 0.82);
+    --glass-blur: saturate(140%) blur(20px);
+
+    --panel-bg: #fffdfa;
+    --chip-bg: #fffefb;
+
+    --shadow-sm: 0 2px 8px rgba(40, 32, 20, 0.07);
+    --shadow-md: 0 18px 44px -14px rgba(40, 32, 20, 0.18);
+    --shadow-lg: 0 40px 90px -26px rgba(40, 32, 20, 0.26);
+    --shadow-accent: 0 20px 50px -20px var(--accent-glow);
+
+    --grain-opacity: 0.035;
+    --aurora-1: rgba(255, 170, 90, 0.3);
+    --aurora-2: rgba(130, 175, 255, 0.22);
+    --aurora-3: rgba(120, 220, 195, 0.18);
+    --spot: rgba(255, 170, 80, 0.1);
+}

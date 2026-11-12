@@ -1,0 +1,1058 @@
+/* ============================================================
+   SHARED COMPONENTS
+   backdrop · cursor · nav · buttons · chips · tags · marquee
+   ============================================================ */
+
+/* ---------------------------------------------------- backdrop */
+
+.backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-bg);
+    pointer-events: none;
+    overflow: hidden;
+    background: var(--ink-0);
+    transition: background var(--t-theme);
+}
+
+/*
+ * No `filter: blur()` here, deliberately. A blur on this container would be
+ * recomputed every frame that a child's transform animates — over 1.4x the
+ * viewport, forever. The gradients below are feathered to 70% instead, which
+ * reads the same and costs nothing: the blobs then animate as pure composited
+ * transforms on their own layers.
+ */
+.aurora {
+    position: absolute;
+    inset: -25%;
+}
+
+.aurora-blob {
+    position: absolute;
+    display: block;
+    border-radius: 50%;
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+.blob-1 {
+    width: 64vw;
+    height: 64vw;
+    top: -12vw;
+    left: -10vw;
+    background: radial-gradient(closest-side circle,
+            var(--aurora-1) 0%,
+            color-mix(in srgb, var(--aurora-1) 45%, transparent) 38%,
+            transparent 72%);
+    animation: drift-a 34s var(--ease-in-out-quint) infinite alternate;
+}
+
+.blob-2 {
+    width: 58vw;
+    height: 58vw;
+    top: 28vh;
+    right: -14vw;
+    background: radial-gradient(closest-side circle,
+            var(--aurora-2) 0%,
+            color-mix(in srgb, var(--aurora-2) 45%, transparent) 38%,
+            transparent 72%);
+    animation: drift-b 44s var(--ease-in-out-quint) infinite alternate;
+}
+
+.blob-3 {
+    width: 52vw;
+    height: 52vw;
+    bottom: -16vw;
+    left: 20vw;
+    background: radial-gradient(closest-side circle,
+            var(--aurora-3) 0%,
+            color-mix(in srgb, var(--aurora-3) 45%, transparent) 38%,
+            transparent 74%);
+    animation: drift-c 52s var(--ease-in-out-quint) infinite alternate;
+}
+
+@keyframes drift-a {
+    from {
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    to {
+        transform: translate3d(8vw, 10vh, 0) scale(1.18);
+    }
+}
+
+@keyframes drift-b {
+    from {
+        transform: translate3d(0, 0, 0) scale(1.1);
+    }
+
+    to {
+        transform: translate3d(-10vw, -8vh, 0) scale(0.92);
+    }
+}
+
+@keyframes drift-c {
+    from {
+        transform: translate3d(0, 0, 0) scale(0.95);
+    }
+
+    to {
+        transform: translate3d(12vw, -12vh, 0) scale(1.2);
+    }
+}
+
+.bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(to right, var(--line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+    background-size: 84px 84px;
+    opacity: 0.5;
+    -webkit-mask-image: radial-gradient(ellipse 85% 70% at 50% 40%, #000 20%, transparent 78%);
+    mask-image: radial-gradient(ellipse 85% 70% at 50% 40%, #000 20%, transparent 78%);
+}
+
+/*
+ * A fixed-size gradient disc moved by transform only. Painting a
+ * `radial-gradient at var(--mx) var(--my)` across the whole viewport instead
+ * would repaint a full-screen layer on every pointer move.
+ */
+.bg-spot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 760px;
+    height: 760px;
+    margin: -380px 0 0 -380px;
+    background: radial-gradient(closest-side circle, var(--spot), transparent 70%);
+    transform: translate3d(-9999px, -9999px, 0);
+    will-change: transform;
+}
+
+/*
+ * Static grain. Animating it meant repainting a 4x-viewport layer ten times
+ * a second for an effect nobody can consciously see moving.
+ */
+.bg-grain {
+    position: absolute;
+    inset: 0;
+    opacity: var(--grain-opacity);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+}
+
+.bg-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 120% 90% at 50% 0%,
+            transparent 40%,
+            color-mix(in srgb, var(--ink-0) 85%, transparent) 100%);
+}
+
+/* ------------------------------------------------------ cursor */
+
+@media (hover: hover) and (pointer: fine) and (min-width: 900px) {
+    body {
+        cursor: none;
+    }
+
+    a,
+    button,
+    [role='tab'] {
+        cursor: none;
+    }
+}
+
+.cursor-dot,
+.cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: var(--z-cursor);
+    pointer-events: none;
+    border-radius: 50%;
+    translate: -50% -50%;
+    will-change: transform;
+}
+
+/* Both elements are centred on the pointer by the shared `translate: -50% -50%`
+   above. Do not add negative margins here: that centres them a second time and
+   leaves the dot and ring visibly out of line with each other. */
+.cursor-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+}
+
+.cursor-ring {
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line-strong);
+}
+
+.cursor-ring.is-link {
+    border-color: var(--accent);
+    background: var(--accent-wash);
+}
+
+.cursor-ring.is-label {
+    border-color: transparent;
+    background: var(--accent);
+    color: var(--accent-ink);
+}
+
+.cursor-label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+}
+
+/* ------------------------------------------------ scroll progress */
+
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    z-index: calc(var(--z-nav) + 1);
+    transform-origin: left center;
+    background: linear-gradient(90deg, var(--accent-deep), var(--accent), var(--accent-soft));
+}
+
+/* --------------------------------------------------------- nav */
+
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-nav);
+    padding: 1.1rem var(--gutter);
+    transition: padding var(--t-med);
+}
+
+.nav.is-condensed {
+    padding-block: 0.6rem;
+}
+
+.nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: var(--maxw);
+    margin-inline: auto;
+    padding: 0.55rem 0.7rem 0.55rem 0.9rem;
+    border-radius: var(--r-full);
+    border: 1px solid transparent;
+    transition: background var(--t-med), border-color var(--t-med),
+        box-shadow var(--t-med);
+}
+
+.nav.is-condensed .nav-inner {
+    background: var(--glass);
+    border-color: var(--line);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: var(--shadow-md);
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    min-width: 0;
+}
+
+.nav-mark {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border-radius: 11px;
+    background: linear-gradient(140deg, var(--accent), var(--accent-deep));
+    color: var(--accent-ink);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    box-shadow: var(--shadow-accent);
+    transition: transform var(--t-fast);
+}
+
+.nav-brand:hover .nav-mark {
+    transform: rotate(-6deg) scale(1.06);
+}
+
+.nav-brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+    min-width: 0;
+}
+
+.nav-brand-text strong {
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--fg-strong);
+}
+
+.nav-brand-role {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--fg-faint);
+    white-space: nowrap;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+}
+
+.nav-link {
+    position: relative;
+    display: block;
+    padding: 0.42rem 0.85rem;
+    border-radius: var(--r-full);
+    font-size: 0.86rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--fg-muted);
+    transition: color var(--t-fast);
+}
+
+.nav-link span {
+    position: relative;
+    z-index: 1;
+}
+
+.nav-link:hover {
+    color: var(--fg-strong);
+}
+
+.nav-link.is-active {
+    color: var(--fg-strong);
+}
+
+.nav-pill {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--r-full);
+    background: var(--glass-strong);
+    border: 1px solid var(--line);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.nav-burger {
+    display: none;
+    width: 40px;
+    height: 40px;
+    place-items: center;
+    border-radius: var(--r-full);
+    border: 1px solid var(--line);
+    color: var(--fg);
+    font-size: 1.15rem;
+    background: var(--glass);
+}
+
+/* mobile sheet */
+.nav-sheet {
+    position: fixed;
+    inset: 0;
+    z-index: calc(var(--z-nav) - 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    padding: calc(var(--nav-h) + 2rem) var(--gutter) 3rem;
+    background: color-mix(in srgb, var(--ink-0) 92%, transparent);
+    backdrop-filter: blur(26px);
+    -webkit-backdrop-filter: blur(26px);
+}
+
+.nav-sheet-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.nav-sheet-links a {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding-block: 0.3rem;
+    font-size: clamp(2.2rem, 11vw, 3.4rem);
+    line-height: 1.05;
+    color: var(--fg-strong);
+    transition: color var(--t-fast), transform var(--t-fast);
+}
+
+.nav-sheet-links a:active {
+    color: var(--accent);
+    transform: translateX(6px);
+}
+
+.nav-sheet-index {
+    color: var(--accent);
+    font-size: 0.65rem;
+}
+
+.nav-sheet-foot {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+}
+
+.nav-sheet-foot a {
+    color: var(--accent);
+}
+
+/* ------------------------------------------------ theme toggle */
+
+.theme-toggle {
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border-radius: var(--r-full);
+}
+
+.theme-track {
+    display: flex;
+    align-items: center;
+    width: 58px;
+    height: 30px;
+    padding: 3px;
+    border-radius: var(--r-full);
+    border: 1px solid var(--line);
+    background: var(--panel-bg);
+    transition: border-color var(--t-fast), background var(--t-med);
+}
+
+.theme-track[data-state='dark'] {
+    justify-content: flex-start;
+}
+
+.theme-track[data-state='light'] {
+    justify-content: flex-end;
+}
+
+.theme-toggle:hover .theme-track {
+    border-color: var(--accent);
+}
+
+.theme-knob {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-ink);
+    box-shadow: var(--shadow-sm);
+}
+
+.theme-knob-icon {
+    display: grid;
+    place-items: center;
+    font-size: 0.72rem;
+}
+
+/* ----------------------------------------------------- buttons */
+
+.btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.4rem;
+    border-radius: var(--r-full);
+    font-size: 0.92rem;
+    font-weight: 500;
+    letter-spacing: -0.012em;
+    white-space: nowrap;
+    overflow: hidden;
+    isolation: isolate;
+    transition: transform var(--t-fast), box-shadow var(--t-med),
+        background var(--t-med), color var(--t-med), border-color var(--t-med);
+}
+
+.btn svg {
+    flex-shrink: 0;
+    font-size: 1.05em;
+    transition: transform var(--t-fast);
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.btn-sm {
+    padding: 0.58rem 1.05rem;
+    font-size: 0.84rem;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 600;
+    box-shadow: var(--shadow-accent);
+}
+
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background: linear-gradient(110deg, var(--accent-soft), var(--accent));
+    opacity: 0;
+    transition: opacity var(--t-med);
+}
+
+.btn-primary:hover::after {
+    opacity: 1;
+}
+
+/* A single light sweep across the face on hover. */
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    z-index: -1;
+    background: linear-gradient(115deg,
+            transparent 32%,
+            rgba(255, 255, 255, 0.42) 50%,
+            transparent 68%);
+    transform: translateX(-130%);
+    pointer-events: none;
+}
+
+.btn-primary:hover::before {
+    transform: translateX(130%);
+    transition: transform 0.9s var(--ease-out-expo);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 24px 60px -18px var(--accent-glow);
+}
+
+.btn-primary:hover svg {
+    transform: translate(2px, -2px);
+}
+
+.btn-ghost {
+    color: var(--fg-strong);
+    border: 1px solid var(--line-strong);
+    background: var(--panel-bg);
+}
+
+.btn-ghost:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-wash);
+}
+
+.btn-ghost:hover svg {
+    transform: translate(2px, -2px);
+}
+
+/* ------------------------------------------------ chips & tags */
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: var(--r-full);
+    border: 1px solid var(--line);
+    background: var(--chip-bg);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    white-space: nowrap;
+}
+
+.chip-xs {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.6rem;
+}
+
+.chip svg {
+    font-size: 0.9rem;
+}
+
+.chip-live {
+    color: var(--fg);
+    border-color: color-mix(in srgb, var(--mint) 40%, transparent);
+}
+
+.chip-dot {
+    position: relative;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--mint);
+    flex-shrink: 0;
+}
+
+.chip-dot::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1px solid var(--mint);
+    animation: pulse-ring 2.4s var(--ease-out-expo) infinite;
+}
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(0.6);
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: scale(1.8);
+        opacity: 0;
+    }
+}
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.32rem 0.72rem;
+    border-radius: var(--r-xs);
+    border: 1px solid var(--line);
+    background: var(--glass);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.03em;
+    color: var(--fg-muted);
+    transition: color var(--t-fast), border-color var(--t-fast),
+        background var(--t-fast), transform var(--t-fast);
+}
+
+.tag:hover {
+    color: var(--fg-strong);
+    border-color: var(--line-strong);
+    transform: translateY(-2px);
+}
+
+.filter-chip {
+    padding: 0.42rem 0.9rem;
+    border-radius: var(--r-full);
+    border: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    transition: background var(--t-fast), border-color var(--t-fast),
+        color var(--t-fast);
+}
+
+.filter-chip:hover {
+    color: var(--fg-strong);
+    border-color: var(--line-strong);
+}
+
+.filter-chip.is-active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 600;
+}
+
+/* ------------------------------------------------- split text */
+
+.split {
+    display: inline;
+}
+
+.split-word {
+    display: inline-flex;
+    white-space: pre;
+}
+
+.split-word:not(:last-child)::after {
+    content: ' ';
+    display: inline-block;
+    width: 0.26em;
+}
+
+/*
+ * The mask must clip the rising letters but never the letters themselves:
+ * serif descenders (y, j, g, p) and overhanging hooks sit well outside a
+ * tight line box. So the clip window is padded down and out by `--split-pad`
+ * and pulled back with an equal negative margin, which grows the window
+ * without moving anything on the page.
+ */
+.split-mask {
+    --split-pad-b: 0.26em;
+    --split-pad-x: 0.06em;
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    padding: 0.06em var(--split-pad-x) var(--split-pad-b);
+    margin: -0.06em calc(var(--split-pad-x) * -1) calc(var(--split-pad-b) * -1);
+}
+
+/* Same trick on the glyph box, so gradient text (background-clip: text)
+   paints under the descender instead of stopping at the line box. */
+.split-unit {
+    display: inline-block;
+    padding-bottom: var(--split-pad-b, 0.26em);
+    margin-bottom: calc(var(--split-pad-b, 0.26em) * -1);
+    will-change: transform;
+}
+
+.split-em {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--accent);
+}
+
+/* ---------------------------------------------------- tilt card */
+
+/* Flat by default so the card composites as one layer. `.tilt-depth`
+   opts a card into a preserved 3D context so `.tilt-layer` children can
+   sit at their own --z and separate as it turns. */
+.tilt {
+    will-change: transform;
+}
+
+.tilt-depth {
+    transform-style: preserve-3d;
+}
+
+.tilt-depth .tilt-layer {
+    transform: translateZ(var(--z, 0px));
+    will-change: transform;
+}
+
+.tilt-sheen,
+.tilt-glow {
+    position: relative;
+}
+
+/* Accent rim that follows the cursor: a gradient ring cut out by a mask so
+   only the 1px edge shows. */
+.tilt-glow::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(380px circle at var(--gx, 50%) var(--gy, 50%),
+            var(--accent-project, var(--accent)),
+            color-mix(in srgb, var(--accent-project, var(--accent)) 30%, transparent) 40%,
+            transparent 70%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    transition: opacity var(--t-med);
+    z-index: 2;
+}
+
+.tilt-glow:hover::before {
+    opacity: 0.9;
+}
+
+.tilt-sheen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(420px circle at var(--gx, 50%) var(--gy, 50%),
+            color-mix(in srgb, var(--fg) 9%, transparent),
+            transparent 62%);
+    transition: opacity var(--t-med);
+}
+
+.tilt-sheen:hover::after {
+    opacity: 1;
+}
+
+/* ------------------------------------------------------ marquee */
+
+.marquee {
+    position: relative;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+/* Driven by a motion value (see Marquee.jsx) so it can react to scroll
+   velocity; no CSS animation here. */
+.marquee-track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+}
+
+.marquee-row {
+    display: flex;
+    flex-shrink: 0;
+}
+
+.marquee-item {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    padding-right: 1.6rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 3.4vw, 2.6rem);
+    letter-spacing: -0.02em;
+    color: var(--fg-faint);
+    white-space: nowrap;
+    transition: color var(--t-med);
+}
+
+.marquee-item:hover {
+    color: var(--accent);
+}
+
+.marquee-sep {
+    font-size: 0.5em;
+    color: var(--accent);
+    opacity: 0.6;
+}
+
+/* --------------------------------------------------- section head */
+
+.sec-head {
+    position: relative;
+    max-width: 50rem;
+    margin-bottom: clamp(2.5rem, 6vw, 5rem);
+}
+
+/* Outlined index numeral that drifts behind the headline. */
+.sec-watermark {
+    position: absolute;
+    top: -0.35em;
+    right: -0.1em;
+    z-index: -1;
+    font-size: clamp(7rem, 22vw, 18rem);
+    line-height: 1;
+    letter-spacing: -0.06em;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--line-strong);
+    pointer-events: none;
+    user-select: none;
+    will-change: transform, opacity;
+}
+
+.sec-head-center .sec-watermark {
+    right: auto;
+    left: 50%;
+    translate: -50% 0;
+}
+
+.sec-head-center {
+    margin-inline: auto;
+    text-align: center;
+}
+
+.sec-head-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 0.9rem;
+}
+
+.sec-index {
+    color: var(--accent);
+}
+
+.sec-label {
+    color: var(--fg-muted);
+}
+
+.sec-head-rule {
+    margin-bottom: clamp(1.3rem, 3vw, 2.2rem);
+}
+
+.sec-title {
+    font-size: var(--fs-2xl);
+    margin-bottom: 1.1rem;
+}
+
+.sec-lede {
+    margin-top: 0.2rem;
+}
+
+/* ------------------------------------------------------ counter */
+
+.counter {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum';
+}
+
+/* ---------------------------------------------- responsive nav */
+
+@media (max-width: 920px) {
+    .nav-links {
+        display: none;
+    }
+
+    .nav-burger {
+        display: grid;
+    }
+
+    .nav-brand-role {
+        display: none;
+    }
+}
+
+@media (max-width: 520px) {
+    .nav-cta-wrap {
+        display: none;
+    }
+}
+
+/* -------------------------------------------------------- intro */
+
+.intro {
+    position: fixed;
+    inset: 0;
+    z-index: calc(var(--z-cursor) - 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--gutter);
+    background: var(--ink-0);
+    color: var(--fg-strong);
+    will-change: clip-path;
+}
+
+.intro::after {
+    /* The seam the curtain lifts along. */
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0.6;
+}
+
+.intro-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+.intro-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--accent);
+    font-size: 0.72rem;
+}
+
+.intro-mark-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: intro-blink 1s steps(2, start) infinite;
+}
+
+@keyframes intro-blink {
+    to {
+        visibility: hidden;
+    }
+}
+
+.intro-name {
+    font-size: clamp(2.6rem, 8vw, 6rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+}
+
+.intro-role {
+    color: var(--fg-muted);
+}
+
+.intro-foot {
+    position: absolute;
+    left: var(--gutter);
+    right: var(--gutter);
+    bottom: clamp(1.5rem, 5vh, 3.5rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+.intro-count {
+    align-self: flex-end;
+    font-size: clamp(3rem, 10vw, 7rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--fg-strong);
+    font-variant-numeric: tabular-nums;
+}
+
+.intro-rule {
+    display: block;
+    height: 1px;
+    background: var(--fg-strong);
+    transform-origin: left center;
+    opacity: 0.6;
+}
+
+/* ------------------------------------------- theme view transition */
+
+/* The new palette floods out from the toggle (see ThemeContext.jsx). While
+   it runs, per-element colour transitions are frozen so the snapshot pair
+   is crisp rather than caught mid-fade. */
+.vt-theme *,
+.vt-theme *::before,
+.vt-theme *::after {
+    transition: none !important;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+    z-index: 1;
+}
+
+::view-transition-new(root) {
+    z-index: 2;
+    animation: vt-flood 0.75s var(--ease-out-quart) forwards;
+}
+
+@keyframes vt-flood {
+    from {
+        clip-path: circle(0px at var(--vt-x, 100%) var(--vt-y, 0%));
+    }
+
+    to {
+        clip-path: circle(var(--vt-r, 150vmax) at var(--vt-x, 100%) var(--vt-y, 0%));
+    }
+}

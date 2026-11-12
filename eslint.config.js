@@ -24,6 +24,12 @@ export default defineConfig([
     },
     rules: {
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      // Providers ship their own consumer hook alongside the component —
+      // a deliberate, conventional pairing rather than a refresh hazard.
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowExportNames: ['useTheme', 'useSmoothScroll', 'useIntro'] },
+      ],
     },
   },
 ])

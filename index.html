@@ -1,18 +1,48 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet">
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/ChatGPT Image Jul 4, 2026, 04_39_58 PM.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Adityaraj Bagwan | Software Engineer</title>
+  <meta name="theme-color" content="#07070a" />
+
+  <title>Adityaraj Bagwan — Flutter &amp; Full-Stack Engineer</title>
   <meta name="description"
-    content="Portfolio of Adityaraj Bagwan - Software Engineer, specializing in Flutter, React, and Cloud Technologies.">
+    content="Adityaraj Bagwan builds production-grade Flutter apps and full-stack platforms with Node, Firebase, Google Cloud and the Gemini API. Selected work, experience and credentials." />
+  <meta name="author" content="Adityaraj Bagwan" />
+  <link rel="canonical" href="https://adityaraj-portfolio.web.app/" />
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Adityaraj Bagwan — Flutter &amp; Full-Stack Engineer" />
+  <meta property="og:description"
+    content="Production Flutter apps, full-stack platforms and applied AI on Google Cloud." />
+  <meta property="og:url" content="https://adityaraj-portfolio.web.app/" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" type="image/svg+xml" href="/ChatGPT Image Jul 4, 2026, 04_39_58 PM.svg" />
+
+  <!-- Fonts: display serif + grotesque + mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+
+  <script>
+    // Apply the stored theme before first paint so there is no flash of the
+    // wrong palette on reload.
+    (function () {
+      try {
+        var saved = localStorage.getItem('portfolio-theme');
+        var theme = saved === 'light' || saved === 'dark'
+          ? saved
+          : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.style.colorScheme = theme;
+      } catch (e) { /* storage blocked — keep the dark default */ }
+    })();
+  </script>
 </head>
 
 <body>

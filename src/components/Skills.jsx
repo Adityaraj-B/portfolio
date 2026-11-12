@@ -1,162 +1,146 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import {
-    SiC, SiCplusplus, SiPython, SiJavascript, SiDart,
-    SiHtml5, SiCss3, SiReact, SiFlutter,
-    SiGooglecloud, SiGit, SiGithub, SiFirebase,
-    SiNodedotjs, SiExpress, SiDocker, SiVercel,
-    SiNetlify, SiMysql
-} from 'react-icons/si';
-import { TbApi, TbBinaryTree } from 'react-icons/tb';
-import { FiDatabase, FiCloud } from 'react-icons/fi';
-import { MdOutlineSmartToy } from 'react-icons/md';
-
-const skillCategories = [
-    {
-        title: 'Languages',
-        skills: [
-            { icon: <SiC />, name: 'C' },
-            { icon: <SiCplusplus />, name: 'C++' },
-            { icon: <SiPython />, name: 'Python' },
-            { icon: <SiJavascript />, name: 'JavaScript' },
-            { icon: <SiDart />, name: 'Dart' },
-        ],
-    },
-    {
-        title: 'Frontend & Mobile',
-        skills: [
-            { icon: <SiHtml5 />, name: 'HTML5' },
-            { icon: <SiCss3 />, name: 'CSS3' },
-            { icon: <SiReact />, name: 'React' },
-            { icon: <SiFlutter />, name: 'Flutter' },
-            { icon: <SiReact />, name: 'React Native' },
-        ],
-    },
-    {
-        title: 'Backend & Databases',
-        skills: [
-            { icon: <SiNodedotjs />, name: 'Node.js' },
-            { icon: <SiExpress />, name: 'Express.js' },
-            { icon: <SiFirebase />, name: 'Firebase' },
-            { icon: <FiDatabase />, name: 'SQL' },
-            { icon: <TbApi />, name: 'REST APIs' },
-        ],
-    },
-    {
-        title: 'Cloud & AI',
-        skills: [
-            { icon: <SiGooglecloud />, name: 'GCP' },
-            { icon: <FiCloud />, name: 'Vertex AI' },
-            { icon: <FiCloud />, name: 'Cloud Run' },
-            { icon: <MdOutlineSmartToy />, name: 'Gemini API' },
-            { icon: <MdOutlineSmartToy />, name: 'LLM Integration' },
-        ],
-    },
-    {
-        title: 'DevOps & Tools',
-        skills: [
-            { icon: <SiGit />, name: 'Git' },
-            { icon: <SiGithub />, name: 'GitHub Actions' },
-            { icon: <SiDocker />, name: 'Docker' },
-            { icon: <SiVercel />, name: 'Vercel' },
-            { icon: <TbBinaryTree />, name: 'DSA' },
-        ],
-    },
-];
+import { useState } from 'react';
+// eslint-disable-next-line no-unused-vars
+import { AnimatePresence, motion } from 'framer-motion';
+import { marqueeSkills, skillGroups } from '../data/work';
+import { EASE, SPRING, inView, swingUp } from '../lib/motion';
+import SectionHead from './ui/SectionHead';
+import Marquee from './ui/Marquee';
+import { useHoverCapable } from '../lib/hooks';
 
 const Skills = () => {
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.15,
-                delayChildren: 0.1,
-            },
-        },
-    };
+    const [activeId, setActiveId] = useState(skillGroups[0].id);
+    const hoverable = useHoverCapable();
+    const active = skillGroups.find((g) => g.id === activeId) ?? skillGroups[0];
+    const activeIndex = skillGroups.findIndex((g) => g.id === active.id);
 
-    const categoryVariants = {
-        hidden: { opacity: 0, x: -30 },
-        visible: {
-            opacity: 1,
-            x: 0,
-            transition: {
-                duration: 0.7,
-                ease: [0.16, 1, 0.3, 1],
-                staggerChildren: 0.06,
-            },
-        },
-    };
-
-    const tagVariants = {
-        hidden: { opacity: 0, scale: 0.85, y: 20 },
-        visible: (index) => ({
-            opacity: 1,
-            scale: 1,
-            y: 0,
-            transition: {
-                duration: 0.5,
-                delay: index * 0.05,
-                ease: [0.16, 1, 0.3, 1],
-            },
-        }),
-    };
+    const focus = (id) => setActiveId(id);
 
     return (
-        <section id="skills" className="skills-section">
-            <div className="container">
-                <motion.div
-                    className="section-header"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                >
-                    <span className="section-label">Expertise</span>
-                    <h2 className="section-title">Technical Skills</h2>
-                    <p className="section-subtitle">
-                        Technologies and tools I use to bring ideas to life
-                    </p>
-                </motion.div>
+        <section className="section skills-section" id="skills">
+            <div className="shell">
+                <SectionHead
+                    index="04"
+                    label="Capabilities"
+                    title="The *stack* I reach for"
+                    lede="Browse the stack by discipline. Flutter and Google Cloud are where I go deepest; the rest is what makes a product whole."
+                />
 
-                <motion.div
-                    className="skills-categories"
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: '-80px' }}
-                    variants={containerVariants}
-                >
-                    {skillCategories.map((category, catIndex) => (
-                        <motion.div
-                            className="skill-category"
-                            key={catIndex}
-                            variants={categoryVariants}
-                        >
-                            <h3 className="skill-category-title">{category.title}</h3>
-                            <div className="skill-tags">
-                                {category.skills.map((skill, skillIndex) => (
-                                    <motion.span
-                                        className="skill-tag glass-card"
-                                        key={skillIndex}
-                                        custom={skillIndex}
-                                        variants={tagVariants}
-                                        whileHover={{
-                                            y: -6,
-                                            scale: 1.08,
-                                            boxShadow: '0 12px 40px rgba(192, 192, 200, 0.15)',
-                                            borderColor: 'var(--accent-primary)',
-                                            transition: { duration: 0.2 }
+                <div className="skills-browser">
+                    {/* ---- index column ---- */}
+                    <ul className="skills-index" role="tablist" aria-label="Skill categories">
+                        {skillGroups.map((group, i) => {
+                            const isActive = group.id === active.id;
+                            return (
+                                <motion.li
+                                    key={group.id}
+                                    initial={{ opacity: 0, x: -18 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={inView}
+                                    transition={{
+                                        duration: 0.7,
+                                        ease: EASE.out,
+                                        delay: i * 0.05,
+                                    }}
+                                >
+                                    <button
+                                        type="button"
+                                        role="tab"
+                                        aria-selected={isActive}
+                                        className={`skills-tab${isActive ? ' is-active' : ''}`}
+                                        onClick={() => focus(group.id)}
+                                        onMouseEnter={hoverable ? () => focus(group.id) : undefined}
+                                        onFocus={() => focus(group.id)}
+                                        data-cursor="hide"
+                                    >
+                                        {isActive ? (
+                                            <motion.span
+                                                layoutId="skills-marker"
+                                                className="skills-marker"
+                                                transition={SPRING.snappy}
+                                            />
+                                        ) : null}
+                                        <span className="mono skills-tab-index">
+                                            {String(i + 1).padStart(2, '0')}
+                                        </span>
+                                        <span className="skills-tab-title">{group.title}</span>
+                                        <span className="skills-tab-count mono">
+                                            {group.skills.length}
+                                        </span>
+                                    </button>
+                                </motion.li>
+                            );
+                        })}
+                    </ul>
+
+                    {/* ---- detail panel ---- */}
+                    <motion.div
+                        className="skills-panel"
+                        style={{ transformPerspective: 1200 }}
+                        variants={swingUp(0.1)}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={inView}
+                    >
+                        <div className="skills-panel-head">
+                            <span className="mono muted">{active.note}</span>
+                            <span className="mono skills-panel-pos">
+                                {String(activeIndex + 1).padStart(2, '0')} /{' '}
+                                {String(skillGroups.length).padStart(2, '0')}
+                            </span>
+                        </div>
+
+                        <AnimatePresence mode="wait">
+                            <motion.ul
+                                className="skills-list"
+                                key={active.id}
+                                initial="hidden"
+                                animate="visible"
+                                exit="exit"
+                                variants={{
+                                    hidden: {},
+                                    visible: { transition: { staggerChildren: 0.055 } },
+                                    exit: { transition: { staggerChildren: 0.02, staggerDirection: -1 } },
+                                }}
+                            >
+                                {active.skills.map((skill) => (
+                                    <motion.li
+                                        key={skill}
+                                        className="skills-item"
+                                        style={{
+                                            transformPerspective: 700,
+                                            transformOrigin: '0% 100%',
+                                        }}
+                                        variants={{
+                                            // opacity + transform only: animating
+                                            // filter: blur() here repainted this
+                                            // large serif text every frame.
+                                            hidden: { opacity: 0, y: 26, rotateX: -50 },
+                                            visible: {
+                                                opacity: 1,
+                                                y: 0,
+                                                rotateX: 0,
+                                                transition: { duration: 0.65, ease: EASE.out },
+                                            },
+                                            exit: {
+                                                opacity: 0,
+                                                y: -14,
+                                                rotateX: 30,
+                                                transition: { duration: 0.22 },
+                                            },
                                         }}
                                     >
-                                        <span className="skill-tag-icon">{skill.icon}</span>
-                                        {skill.name}
-                                    </motion.span>
+                                        <span className="display">{skill}</span>
+                                    </motion.li>
                                 ))}
-                            </div>
-                        </motion.div>
-                    ))}
-                </motion.div>
+                            </motion.ul>
+                        </AnimatePresence>
+                    </motion.div>
+                </div>
+            </div>
+
+            <div className="skills-ribbon">
+                <Marquee items={marqueeSkills} speed={46} />
+                <Marquee items={[...marqueeSkills].reverse()} speed={56} reverse />
             </div>
         </section>
     );

@@ -1,220 +1,114 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { ThemeProvider } from './context/ThemeContext';
+import { useEffect } from 'react';
+import {
+    BrowserRouter,
+    Route,
+    Routes,
+    useLocation,
+} from 'react-router-dom';
 // eslint-disable-next-line no-unused-vars
-import { motion, AnimatePresence } from 'framer-motion';
-import Lenis from 'lenis';
-import 'lenis/dist/lenis.css';
-import './App.css';
+import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
 
-import Navbar from './components/Navbar.jsx';
-import Hero from './components/Hero.jsx';
-import About from './components/About.jsx';
-import Skills from './components/Skills.jsx';
-import Projects from './components/Projects.jsx';
-import Certifications from './components/Certifications.jsx';
-import Badges from './components/Badges.jsx';
-import Footer from './components/Footer.jsx';
-import ResumePage from './components/ResumePage.jsx';
-import LiquidGlassBackground from './components/LiquidGlassBackground.jsx';
+import { ThemeProvider } from './context/ThemeContext';
+import { IntroProvider } from './context/IntroContext';
+import SmoothScrollProvider, { useSmoothScroll } from './lib/SmoothScroll';
+import { pageTransition } from './lib/motion';
 
-const ScrollToTop = () => {
+import Backdrop from './components/Backdrop';
+import Cursor from './components/Cursor';
+import Intro from './components/Intro';
+import ScrollProgress from './components/ScrollProgress';
+import Navbar from './components/Navbar';
+import Hero from './components/Hero';
+import Work from './components/Work';
+import About from './components/About';
+import Experience from './components/Experience';
+import Skills from './components/Skills';
+import Credentials from './components/Credentials';
+import Contact from './components/Contact';
+import ResumePage from './components/ResumePage';
+
+import './styles/main.css';
+
+/**
+ * Jump to the top instantly on route change so transitions start clean.
+ * Goes through Lenis when it is running — a bare window.scrollTo would
+ * leave Lenis's internal position desynced and cause a jump on first wheel.
+ */
+const ResetScroll = () => {
     const { pathname } = useLocation();
+    const { lenis } = useSmoothScroll();
+
     useEffect(() => {
-        // Instant scroll on route change to prevent Lenis conflicts
-        window.scrollTo(0, 0);
-    }, [pathname]);
+        if (lenis) lenis.scrollTo(0, { immediate: true, force: true });
+        else window.scrollTo(0, 0);
+    }, [pathname, lenis]);
+
     return null;
 };
 
-// Page transition variants
-const pageVariants = {
-    initial: { opacity: 0, y: 16 },
-    animate: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
-    },
-    exit: {
-        opacity: 0,
-        y: -12,
-        transition: { duration: 0.3, ease: [0.4, 0, 1, 1] },
-    },
-};
-
-// 3D fold-in on scroll
-const sectionVariants = {
-    hidden: {
-        opacity: 0,
-        y: 80,
-        rotateX: -15,
-        scale: 0.95,
-        z: -100
-    },
-    visible: {
-        opacity: 1,
-        y: 0,
-        rotateX: 0,
-        scale: 1,
-        z: 0,
-        transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] },
-    },
-};
-
-const AnimatedSection = ({ children }) => (
+const Page = ({ children }) => (
     <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.15 }}
-        variants={sectionVariants}
-        style={{ perspective: 1200, transformStyle: "preserve-3d" }}
+        variants={pageTransition}
+        initial="initial"
+        animate="animate"
+        exit="exit"
     >
         {children}
     </motion.div>
 );
 
-const HomePage = () => {
-    return (
-        <motion.div
-            variants={pageVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-        >
-            <Hero />
-            <main>
-                <AnimatedSection><About /></AnimatedSection>
-                <AnimatedSection><Skills /></AnimatedSection>
-                <AnimatedSection><Projects /></AnimatedSection>
-                <AnimatedSection><Certifications /></AnimatedSection>
-                <AnimatedSection><Badges /></AnimatedSection>
-            </main>
-            <AnimatedSection><Footer /></AnimatedSection>
-        </motion.div>
-    );
-};
+const Home = () => (
+    <Page>
+        <Hero />
+        <Work />
+        <About />
+        <Experience />
+        <Skills />
+        <Credentials />
+        <Contact />
+    </Page>
+);
 
-const AnimatedRoutes = () => {
+const Shell = () => {
     const location = useLocation();
     return (
-        <AnimatePresence mode="wait" initial={false}>
-            <Routes location={location} key={location.pathname}>
-                <Route path="/" element={<HomePage />} />
-                <Route
-                    path="/resume"
-                    element={
-                        <motion.div
-                            variants={pageVariants}
-                            initial="initial"
-                            animate="animate"
-                            exit="exit"
-                        >
-                            <ResumePage />
-                        </motion.div>
-                    }
-                />
-            </Routes>
-        </AnimatePresence>
+        <>
+            <ResetScroll />
+            <Navbar />
+            <AnimatePresence mode="wait" initial={false}>
+                <Routes location={location} key={location.pathname}>
+                    <Route path="/" element={<Home />} />
+                    <Route
+                        path="/resume"
+                        element={
+                            <Page>
+                                <ResumePage />
+                            </Page>
+                        }
+                    />
+                    <Route path="*" element={<Home />} />
+                </Routes>
+            </AnimatePresence>
+        </>
     );
 };
 
-const loadingMessages = [
-    "INITIALIZING ENVIRONMENT",
-    "BUILDING GEOMETRY",
-    "COMPILING SHADERS",
-    "ASSEMBLING SCENE",
-    "CALIBRATING LIGHTING",
-    "POLISHING PIXELS",
-];
-
-/*
- * CustomLoader — Pure CSS loading screen.
- *
- * All 6 messages are rendered at once as a vertical strip inside a 20px
- * clipping container.  A CSS `transform: translateY()` animation with
- * `steps(5)` scrolls through them on the **compositor thread**, which is
- * completely independent of the main thread.  This keeps the text cycling
- * smoothly even while the GPU is blocked compiling WebGL shaders.
- */
-const CustomLoader = ({ show }) => {
-    const [mounted, setMounted] = useState(true);
-    const overlayRef = useRef(null);
-
-    useEffect(() => {
-        if (show) { setMounted(true); return; }
-        const node = overlayRef.current;
-        if (!node) { setMounted(false); return; }
-        const onEnd = (e) => { if (e.propertyName === 'opacity') setMounted(false); };
-        node.addEventListener('transitionend', onEnd);
-        requestAnimationFrame(() => node.classList.add('loader-hidden'));
-        return () => node.removeEventListener('transitionend', onEnd);
-    }, [show]);
-
-    if (!mounted) return null;
-
-    return (
-        <div ref={overlayRef} className="global-preloader">
-            <div className="preloader-text-wrap">
-                <div className="preloader-text-strip">
-                    {loadingMessages.map((msg, i) => (
-                        <span key={i} className="preloader-text-item">{msg}</span>
-                    ))}
-                </div>
-            </div>
-        </div>
-    );
-};
-
-function App() {
-    const [loaderDone, setLoaderDone] = useState(false);
-
-    // The 3D scene fires onLoaded once its initial shaders are compiled
-    // and the first frames have rendered → dismiss the loader.
-    const handleSceneReady = () => {
-        // Tiny delay so the rendered frame is fully flushed before transition
-        requestAnimationFrame(() => setLoaderDone(true));
-    };
-
-    // Safety fallback: if shaders take abnormally long, dismiss anyway
-    useEffect(() => {
-        const id = setTimeout(() => setLoaderDone(true), 8000);
-        return () => clearTimeout(id);
-    }, []);
-
-    useEffect(() => {
-        const savedTheme = localStorage.getItem('portfolio-theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-
-        const lenis = new Lenis({
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            smooth: true,
-            smoothTouch: false,
-        });
-        let rafId;
-        function raf(time) {
-            lenis.raf(time);
-            rafId = requestAnimationFrame(raf);
-        }
-        rafId = requestAnimationFrame(raf);
-
-        return () => {
-            lenis.destroy();
-            cancelAnimationFrame(rafId);
-        };
-    }, []);
-
-    return (
+const App = () => (
+    <MotionConfig reducedMotion="user">
         <ThemeProvider>
-            <CustomLoader show={!loaderDone} />
-            <LiquidGlassBackground onLoaded={handleSceneReady} />
-            <Router>
-                <ScrollToTop />
-                <Navbar />
-                <AnimatedRoutes />
-            </Router>
+            <SmoothScrollProvider>
+                <IntroProvider>
+                    <Backdrop />
+                    <Cursor />
+                    <ScrollProgress />
+                    <Intro />
+                    <BrowserRouter>
+                        <Shell />
+                    </BrowserRouter>
+                </IntroProvider>
+            </SmoothScrollProvider>
         </ThemeProvider>
-    );
-}
+    </MotionConfig>
+);
 
 export default App;
