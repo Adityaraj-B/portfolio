@@ -37,7 +37,7 @@ const Contact = () => {
                     viewport={inView}
                     transition={{ duration: 0.7 }}
                 >
-                    <span className="mono">06 — Contact</span>
+                    <span className="mono">06 / Contact</span>
                     {profile.available ? (
                         <span className="chip chip-live">
                             <span className="chip-dot" />

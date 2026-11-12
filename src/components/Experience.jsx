@@ -100,7 +100,7 @@ const Experience = () => {
                     index="03"
                     label="Experience"
                     title="Where the *hours* went"
-                    lede="Client work, hackathon builds and independent products — the places where I learned what holds up under real use."
+                    lede="Client work, hackathon builds and independent products, the places where I learned what holds up under real use."
                 />
 
                 <div className="xp-wrap" ref={ref}>

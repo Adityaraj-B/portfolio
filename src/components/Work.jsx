@@ -51,7 +51,7 @@ const ProjectMedia = ({ project }) => {
                 {project.image ? (
                     <motion.img
                         src={project.image}
-                        alt={`${project.title} — ${project.subtitle}`}
+                        alt={`${project.title}: ${project.subtitle}`}
                         loading="lazy"
                         decoding="async"
                         style={{ y }}
@@ -345,7 +345,7 @@ const Work = () => {
                     index="01"
                     label="Selected work"
                     title="Products I have *shipped*"
-                    lede="A selection of builds across mobile, cloud and applied AI. Each one went past the prototype stage — real auth, real payments, real edge cases."
+                    lede="A selection of builds across mobile, cloud and applied AI. Each one went past the prototype stage: real auth, real payments, real edge cases."
                 />
 
                 <div className="work-list">

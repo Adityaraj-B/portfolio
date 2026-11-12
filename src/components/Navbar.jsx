@@ -8,6 +8,7 @@ import { useSmoothScroll } from '../lib/SmoothScroll';
 import { useActiveSection, useScrollLock } from '../lib/hooks';
 import { EASE, SPRING } from '../lib/motion';
 import { useIntro } from '../context/IntroContext';
+import avatar from '../assets/avatar.webp';
 import ThemeToggle from './ThemeToggle';
 import { Magnetic } from './ui/Interactive';
 
@@ -81,7 +82,9 @@ const Navbar = () => {
             >
                 <nav className="nav-inner" aria-label="Primary">
                     <a href="/" className="nav-brand" onClick={goHome} data-cursor="link">
-                        <span className="nav-mark">{profile.initials}</span>
+                        <span className="nav-mark">
+                            <img src={avatar} alt="" width="36" height="36" decoding="async" />
+                        </span>
                         <span className="nav-brand-text">
                             <strong>{profile.firstName}</strong>
                             <span className="mono nav-brand-role">{profile.role}</span>

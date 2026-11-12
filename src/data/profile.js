@@ -16,7 +16,7 @@ export const profile = {
         'Mobile Architect',
     ],
     tagline:
-        'I build production-grade mobile and full-stack products — Flutter apps with clean architecture, Node backends, and AI powered by Google Cloud.',
+        'I build production-grade mobile and full-stack products: Flutter apps with clean architecture, Node backends, and AI powered by Google Cloud.',
     location: 'Pune, Maharashtra, India',
     email: 'adityarajb7@gmail.com',
     phone: '+91 88307 33635',
@@ -41,7 +41,7 @@ export const stats = [
 
 export const about = {
     paragraphs: [
-        "I'm a Computer Science undergraduate at **Vishwakarma University, Pune**, building Flutter and full-stack applications with Firebase, Google Cloud and REST APIs — the kind that ship, handle edge cases, and survive real users.",
+        "I'm a Computer Science undergraduate at **Vishwakarma University, Pune**, building Flutter and full-stack applications with Firebase, Google Cloud and REST APIs. The kind that ship, handle edge cases, and survive real users.",
         'My work sits where **architecture meets craft**: BLoC and Clean Architecture on the mobile side, Node and Express behind it, Vertex AI and the Gemini API when a product needs to think. I care about the hundred small decisions that separate a demo from a product.',
         'Right now I\'m engineering a production insurance platform, studying deep learning, and looking for a team where thoughtful detail is the default.',
     ],
@@ -49,7 +49,7 @@ export const about = {
         school: 'Vishwakarma University',
         degree: 'B.Tech, Computer Science & Engineering',
         place: 'Pune, Maharashtra',
-        period: '2024 — 2028 (Expected May 2028)',
+        period: '2024 to 2028 (Expected May 2028)',
         cgpa: '8.63 / 10',
         coursework: [
             'Data Structures & Algorithms',
@@ -67,7 +67,7 @@ export const experience = [
         company: 'Sankar Group',
         role: 'Flutter Developer Intern',
         kind: 'DIGIPe · Yeskart',
-        period: 'May 2026 — Present',
+        period: 'May 2026 to Present',
         current: true,
         summary:
             'Building production Flutter apps across two products: DIGIPe, a solar-insurance platform, and the customer app for Yeskart\'s multi-vendor marketplace.',
@@ -98,7 +98,7 @@ export const experience = [
         company: 'Sangeet',
         role: 'Cross-Platform Engineer',
         kind: 'Independent Product',
-        period: 'Dec 2025 — Oct 2026',
+        period: 'Dec 2025 to Oct 2026',
         summary:
             'Music streaming app, rebuilt as Sangeet 2.0 with a new design language, an autoplay engine and desktop builds.',
         highlights: [

@@ -135,7 +135,7 @@ const Credentials = () => {
                     index="05"
                     label="Credentials"
                     title="Proof of the *groundwork*"
-                    lede="An AWS Solutions Architect learning plan, Google Cloud specialisations, data-science coursework and a national techathon finish — the receipts behind the stack above."
+                    lede="An AWS Solutions Architect learning plan, Google Cloud specialisations, data-science coursework and a national techathon finish: the receipts behind the stack above."
                 />
 
                 <div className="cred-switch" role="tablist" aria-label="Credential type">
